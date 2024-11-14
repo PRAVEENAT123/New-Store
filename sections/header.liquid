@@ -3,7 +3,7 @@
     <div class="flex justify-center items-center py-6 md:justify-start md:space-x-10">
       <!-- STORE NAME / STORE LOGO -->
       <div class="flex justify-start lg:flex-1 truncate">
-        <a href="#" class="text-xl font-bold truncate">{{shop.name}} </a>
+        <a href="#" class="text-xl font-bold truncate">{{section.settings.shop_name}}</a>
       </div>
 
       <nav x-data="{ open: false }" class="hidden md:flex space-x-10">
@@ -79,3 +79,18 @@ x-show="open"
   </div>
 </div>
 
+{% schema %}
+{
+"name": "Header",
+"settings": [
+{
+"type": "text",
+"id":"shop_name",
+"label": "ShopName",
+"default":"Your_Shop",
+"info": "That is change the shope Name"
+
+}
+]
+}
+{% endschema %}

@@ -1,8 +1,9 @@
 module.exports = {
+    mode: 'jit', 
   content: [
     './layout/*.liquid',
     './templates/**/*.liquid',
-    './sections/*.liquid',
+    './sections/**/*.liquid',
     './snippets/**/*.liquid',
     './assets/**/*.js',
   ],

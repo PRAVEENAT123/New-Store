@@ -1,0 +1,49 @@
+<div class="relative w-full h-64 overflow-hidden">
+    <!-- Slider Wrapper with CSS Animation -->
+    <div class="slider-wrapper flex transition-all  ease-linear animate-slide">
+        {% if section.settings.image_1 == blank %}
+        <img src="{{ section.settings.image_1 | img_url: 'master' }}" class="w-full h-full object-cover">
+        {% endif %}
+        {% if section.settings.image_2 != blank %}
+        <img src="{{ section.settings.image_2 | img_url: 'master' }}" class="w-full h-full object-cover">
+        {% endif %}
+        {% if section.settings.image_3 != blank %}
+        <img src="{{ section.settings.image_3 | img_url: 'master' }}" class="w-full h-full object-cover">
+        {% endif %}
+    </div>
+</div>
+
+{% schema %}
+{
+"name": "Image Slider",
+"settings": [
+{
+"type": "text",
+"id": "titleId",
+"default": "Image Slider",
+"label": "Image Slider Title"
+},
+{
+"type": "image_picker",
+"id": "image_1",
+"label": "Slide 1 Image"
+},
+{
+"type": "image_picker",
+"id": "image_2",
+"label": "Slide 2 Image"
+},
+{
+"type": "image_picker",
+"id": "image_3",
+"label": "Slide 3 Image"
+}
+],
+"presets": [
+{
+"name": "Image slider",
+"category": "Custom"
+}
+]
+}
+{% endschema %}
