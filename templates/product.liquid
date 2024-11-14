@@ -27,3 +27,22 @@
   <button type="submit" name="add" id="AddToCart">Add to cart</button>
 </form>
 <div>{{ product.description }}</div>
+
+<script>
+  document.getElementById('AddToCartForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Update cart count or any necessary UI changes
+        console.log('Item added to cart:', data);
+      })
+      .catch(error => console.error('Error adding to cart:', error));
+  });
+
+</script>
