@@ -5,7 +5,7 @@
         // template404 is Id of the section 
         "template404":{
             // type mean in what are section file name this  case product is section file name 
-            "type": "product"
+            "type": "404"
         }
     },
     "order":["template404"]

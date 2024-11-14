@@ -1,10 +1,11 @@
 {
   "sections": {
-    "cart-item":
+    "cartitems":
     {
       "type":"cart-item",
+      
     },
     
   },
-  "order": ["cart-item"]
+  "order": ["cartitems"]
 }

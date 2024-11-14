@@ -1,13 +1,15 @@
+{% if cart.item_count >0 %}
+
 <section class="py-24 relative">
     <div class="w-full max-w-7xl px-4 md:px-5 lg:px-6 mx-auto">
         <h2 class="title font-manrope font-bold text-4xl leading-10 mb-8 text-center text-black">Shopping Cart</h2>
 
-        <div class="title decoration-solid  text-4xl leading-10 mb-8 text-center text-black">
-            <a href="{{routes.all_products_collection_url}}" class="underline hover:decoration-dashed text-sm">
-                Go Back
+        <div class="title decoration-solid text-4xl leading-10 mb-8 text-center text-black">
+            <a href="{{ routes.all_products_collection_url }}" class="underline hover:decoration-dashed text-sm">
+                Continue Shopping
             </a>
-
         </div>
+
         <div class="overflow-x-auto bg-white rounded-3xl shadow-md">
             <table class="min-w-full table-auto">
                 <thead class="bg-gray-100">
@@ -15,14 +17,14 @@
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Product</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Description</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Quantity</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Price</th>
-                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Total</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Unit Price</th>
+                        <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Total Price</th>
                         <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600">Remove</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for item in cart.items %}
-                    <tr class="border-b">
+                    <tr class="border-b" data-item-key="{{ item.key }}">
                         <td class="py-4 px-4">
                             <img src="{{ item.image | img_url: 'medium' }}" alt="{{ item.product.title }}"
                                 class="w-[120px] h-[120px] object-cover rounded-lg">
@@ -33,15 +35,18 @@
                         </td>
                         <td class="py-4 px-4">
                             <div class="flex items-center gap-4">
-                                <button class="p-2 border border-gray-200 rounded-full">
+                                <button class="decrease-quantity p-2 border border-gray-200  rounded-full "
+                                    data-item-key="{{ item.key }}">
                                     <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M4.5 9.5H13.5" stroke="currentColor" stroke-width="1.6"
                                             stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </button>
-                                <input type="number" class="w-10 text-center border border-gray-200 rounded-full"
-                                    value="{{ item.quantity }}" min="1" />
-                                <button class="p-2 border border-gray-200 rounded-full">
+                                <span class="item-quantity text-center" data-item-key="{{ item.key }}">{{ item.quantity
+                                    }}</span>
+                                <button
+                                    class="increase-quantity p-2 border border-gray-200 rounded-full hover:text-gray-900"
+                                    data-item-key="{{ item.key }}">
                                     <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M3.75 9.5H14.25M9 14.75V4.25" stroke="currentColor" stroke-width="1.6"
                                             stroke-linecap="round" stroke-linejoin="round" />
@@ -49,20 +54,16 @@
                                 </button>
                             </div>
                         </td>
-                        <td class="py-4 px-4 text-gray-900 text-lg">${{ item.price | money }}</td>
-                        <td class="py-4 px-4 text-gray-900 text-lg">${{ item.line_price | money }}</td>
+                        <td class="py-4 px-4 text-gray-900 text-lg">
+                            {{ item.product.price | money_without_currency }}
+                        </td>
+                        <td class="py-4 px-4 text-gray-900 text-lg item-line-price" data-line-price-id="{{ item.key }}">
+                            {{ item.line_price | money_without_currency}}
+                        </td>
                         <td class="py-4 px-4">
-                            <form action="/cart/change" method="post">
-                                <input type="hidden" name="id" value="{{ item.id }}">
-                                <input type="hidden" name="quantity" value="0">
-                                <button type="submit" class="text-red-500 hover:text-red-700">
-                                    <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 3L17 17" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                        <path d="M17 3L3 17" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                </button>
+                            <form action="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
+                                method="post">
+                                <button type="submit" class="text-red-500 hover:text-red-700">Remove</button>
                             </form>
                         </td>
                     </tr>
@@ -70,22 +71,84 @@
                 </tbody>
             </table>
         </div>
-
         <div class="flex flex-col md:flex-row items-center justify-between lg:px-6 py-6 border-t border-gray-200">
             <h5 class="text-gray-900 font-manrope font-semibold text-2xl leading-9 w-full text-center md:text-left">
-                Subtotal</h5>
-
+                Subtotal
+            </h5>
             <div class="flex items-center justify-between gap-5">
-                <button
-                    class="rounded-full py-2.5 px-3 bg-indigo-50 text-indigo-600 font-semibold text-xs text-center whitespace-nowrap transition-all duration-500 hover:bg-indigo-100">Promo
-                    Code?</button>
-                <h6 class="font-manrope font-bold text-3xl text-indigo-600">${{ cart.total_price | money }}</h6>
+                <h6 class="font-manrope font-bold text-3xl text-indigo-600 cart-total">{{ cart.total_price | money }}
+                </h6>
             </div>
         </div>
 
         <div class="max-lg:max-w-lg max-lg:mx-auto text-center mt-6">
-            <a href="/checkout"
-                class="rounded-full py-4 px-6 bg-indigo-600 text-white font-semibold text-lg w-full transition-all duration-500 hover:bg-indigo-700">Checkout</a>
+            <div class="my-2">
+                <button type="submit" name="checkout"
+                    class="w-full p-3 border border-gray-600 font-medium bg-gray-600 text-white">Checkout</button>
+            </div>
         </div>
     </div>
 </section>
+{% else %}
+<div class="flex items-center justify-center min-h-screen py-8 px-4 md:px-5 lg:px-5">
+    <div class="w-full max-w-7xl mx-auto text-center">
+        <h2 class="font-manrope font-bold text-4xl leading-10 mb-4 text-black">
+            Your Cart
+        </h2>
+        <div class="mb-8">
+            <h2 class="font-manrope  text-xl leading-10 mb-4 text-black">
+                Your cart is currently empty.
+            </h2>
+        </div>
+        <div class="mb-8">
+            <a href="{{ routes.all_products_collection_url }}"
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+                Continue Shopping
+            </a>
+        </div>
+        <div>
+            {{cart.item_count}}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+"name": "Cart Template",
+"settings": [
+
+]
+}
+{% endschema %}
+<script>
+    document.querySelectorAll('.increase-quantity, .decrease-quantity').forEach(button => {
+        button.addEventListener('click', function () {
+            const itemKey = this.getAttribute('data-item-key');
+            const isIncrease = this.classList.contains('increase-quantity');
+            const quantityEl = document.querySelector(`[data-item-key="${itemKey}"] .item-quantity`);
+            let currentQuantity = parseInt(quantityEl.textContent);
+            let newQuantity = isIncrease ? currentQuantity + 1 : Math.max(1, currentQuantity - 1);
+
+            fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: itemKey, quantity: newQuantity })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the item quantity
+                    quantityEl.textContent = newQuantity;
+
+                    // Update the line price for this item
+                    const linePriceEl = document.querySelector(`[data-line-price-id="${itemKey}"]`);
+                    const updatedItem = data.items.find(i => i.key === itemKey);
+                    linePriceEl.textContent = `$${(updatedItem.line_price / 100).toFixed(2)}`;
+
+                    // Update the cart total
+                    document.querySelector('.cart-total').textContent = `$${(data.total_price / 100).toFixed(2)}`;
+                })
+                .catch(error => console.error('Error updating cart:', error));
+        });
+    });
+</script>

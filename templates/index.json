@@ -15,10 +15,10 @@
 // "category":{
 //     "type":"category",
 // },
-   "product":{
-"type": "product"
+   "homepage":{
+"type": "collections"
    }
     },
  
-    "order":["product"]
+    "order":["homepage"]
 }
