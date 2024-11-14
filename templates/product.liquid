@@ -30,7 +30,8 @@
 
 <script>
   document.getElementById('AddToCartForm').addEventListener('submit', function (event) {
-    event.preventDefault();
+    event.preventDefault();  // Prevent the default form submission
+
     const formData = new FormData(this);
 
     fetch('/cart/add.js', {
@@ -39,8 +40,11 @@
     })
       .then(response => response.json())
       .then(data => {
-        // Update cart count or any necessary UI changes
+        // Log or handle successful add to cart (optional)
         console.log('Item added to cart:', data);
+
+        // Redirect to the cart page after the item is added
+        window.location.href = '/cart';
       })
       .catch(error => console.error('Error adding to cart:', error));
   });

@@ -61,10 +61,8 @@
                             {{ item.line_price | money_without_currency}}
                         </td>
                         <td class="py-4 px-4">
-                            <form action="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0"
-                                method="post">
-                                <button type="submit" class="text-red-500 hover:text-red-700">Remove</button>
-                            </form>
+                            <button class="remove-item text-red-500 hover:text-red-700"
+                                data-item-key="{{ item.key }}">Remove</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -105,9 +103,6 @@
                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                 Continue Shopping
             </a>
-        </div>
-        <div>
-            {{cart.item_count}}
         </div>
     </div>
 </div>
@@ -151,4 +146,26 @@
                 .catch(error => console.error('Error updating cart:', error));
         });
     });
+</script>
+
+<script>
+    document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function () {
+            const itemKey = this.getAttribute('data-item-key');
+
+            fetch('/cart/change.js', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: itemKey, quantity: 0 })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Redirect to the cart page after item removal
+                    window.location.href = '/cart';
+                })
+                .catch(error => console.error('Error removing item:', error));
+        });
+    });
+
+
 </script>
