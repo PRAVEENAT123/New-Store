@@ -1,14 +1,16 @@
+// tailwind.config.js
 module.exports = {
-    mode: 'jit', 
   content: [
-    './layout/*.liquid',
-    './templates/**/*.liquid',
-    './sections/**/*.liquid',
-    './snippets/**/*.liquid',
-    './assets/**/*.js',
+    "./**/*.liquid", // Scan all Liquid files
+    "./layout/**/*.liquid",
+    "./sections/**/*.liquid",
+    "./templates/**/*.liquid",
+    "./snippets/**/*.liquid",
+    "./styles/**/*.css",
+    // Add any other directories if needed
   ],
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}
