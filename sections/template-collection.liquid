@@ -1,14 +1,13 @@
 <div class="px-4 py-8">
-    {% paginate collection.products by section.settings.number_of_porduct_show %}
+    {% paginate collection.products by section.settings.number_of_product_show %}
     <h1 class="text-3xl text-center">{{ collection.title }}</h1>
     <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Responsive Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {% for product in collection.products %}
             <div class="w-full py-6 px-3">
-                {% comment %} Then Same parameter Name use for instend of used {% endcomment %}
-                {% render 'productcard' product_info:product %}
-                
-
+                <!-- Render product card -->
+                {% render 'productcard', product_info: product %}
             </div>
             {% else %}
             <p>There are no products inside of this collection</p>
@@ -16,20 +15,23 @@
         </div>
     </div>
 
+    <!-- Pagination -->
     {% render 'pagination', pagination: paginate %}
     {% endpaginate %}
 </div>
+
 {% schema %}
 {
 "name": "Template Collection",
 "settings": [
 {
 "type": "number",
-"id": "number_of_porduct_show",
-"label": "Number of Product",
-"default":6
+"id": "number_of_product_show",
+"label": "Number of Products",
+"default": 6
 }
-],"presets": [
+],
+"presets": [
 {
 "name": "Template Collection",
 "category": "Custom"
