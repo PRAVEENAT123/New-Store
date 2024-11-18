@@ -1,6 +1,6 @@
 <div class="border bg-white shadow-lg rounded-lg overflow-hidden">
     <a href="{{ product_info.url }}">
-        {% if product_info_info.featured_image %}
+        {% if product_info.featured_image %}
         <div class="h-80 overflow-hidden">
             <img class="w-full h-full object-cover" src="{{ product_info.featured_image | img_url: 'medium' }}"
                 alt="{{ product_info.featured_image.alt }}">
@@ -9,12 +9,10 @@
         {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover bg-gray-100' }}
         {% endif %}
     </a>
-
     <div class="flex flex-col p-4">
-        <span class="text-sm text-gray-400">{{ product_info.vendor }}</span>
-
-        <a href="{{ product_info.url }}" class="text-gray-700 uppercase font-medium">{{ product_info.title }}</a>
-
-        <p class="text-gray-500">{{ product_info.price | money }}</p>
+        <span class="text-sm text-gray-400">{{ product_info.vendor | default: 'Unknown Vendor' }}</span>
+        <a href="{{ product_info.url }}" class="text-gray-700 uppercase font-medium">{{ product_info.title | default:
+            'Untitled Product' }}</a>
+        <p class="text-gray-500">{{ product_info.price | money_with_currency | default: 'Price not available' }}</p>
     </div>
 </div>
