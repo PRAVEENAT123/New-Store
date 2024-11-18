@@ -7,7 +7,6 @@
             section.settings.number_of_products_to_show %}
             {% assign product_deatils = product %}
             {% render 'productcard', product_info: product_deatils %}
-            <pre>{{ product_info | json }}</pre>
             {% else %}
             {% for item in (1..4) %}
             {% render 'product-card-placeholder' %}
