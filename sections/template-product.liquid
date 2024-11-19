@@ -1,3 +1,138 @@
-<h1>
-    This product
-</h1>
+<div class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-wrap -mx-4">
+            <!-- Product Images -->
+            <div class="w-full md:w-1/2 px-4 mb-8">
+                <img src="{{ product.featured_image | img_url: '500x500' }}" alt="{{ product.title }}"
+                    class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage">
+                <div class="flex gap-4 py-4 justify-center overflow-x-auto">
+                    {% for image in product.images %}
+                    <img src="{{ image | img_url: '200x200' }}" alt="{{ product.title }}"
+                        class="size-16 sm:size-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
+                        onclick="changeImage('{{ image | img_url: '1024x1024' }}')">
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="w-full md:w-1/2 px-4">
+                <h2 class="text-3xl font-bold mb-2">{{ product.title }}</h2>
+                <div class="mb-4">
+                    <span class="text-2xl font-bold mr-2">{{ product.price | money }}</span>
+                    {% if product.compare_at_price > product.price %}
+                    <span class="text-gray-500 line-through">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                </div>
+                <p class="text-gray-700 mb-6">{{ product.description | strip_html | truncate: 150 }}</p>
+
+                <!-- Variant Selector -->
+                <div class="mb-4">
+                    <label for="variant" class="block text-sm font-medium text-gray-700 mb-1">Select Variant:</label>
+                    <select id="variant" name="variant"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        {% for variant in product.variants %}
+                        <option value="{{ variant.id }}">
+                            {{ variant.title }} {% if variant.available == false %} - Sold Out {% endif %}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label for="quantity" class="block text-sm font-medium text-gray-700 mb-1">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="1" value="1"
+                        class="w-12 text-center rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </div>
+
+                <div class="flex space-x-4 mb-6">
+                    <button id="addToCartButton"
+                        class="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg">
+            <h2 class="text-xl font-bold mb-4">Cart Items</h2>
+            <div id="cartItems" class="space-y-4"></div>
+            <button id="closeModalButton"
+                class="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Close</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    // Add to Cart Functionality
+    document.getElementById('addToCartButton').addEventListener('click', function () {
+        const variantId = document.getElementById('variant').value;
+        const quantity = document.getElementById('quantity').value;
+
+        // Add item to cart
+        fetch('/cart/add.js', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: variantId, quantity: quantity })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to add item to cart');
+                }
+                return response.json();
+            })
+            .then(() => fetch('/cart.js')) // Fetch updated cart
+            .then(response => response.json())
+            .then(data => {
+                displayCartModal(data.items); // Display modal with cart items
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update cart. Please try again.');
+            });
+    });
+
+    // Custom Money Formatter
+    function formatMoney(cents, currencySymbol = '$') {
+        const amount = (cents / 100).toFixed(2); // Convert cents to dollars
+        return `${currencySymbol}${amount}`;
+    }
+
+    // Display Cart Modal
+    function displayCartModal(items) {
+        const cartModal = document.getElementById('cartModal');
+        const cartItemsContainer = document.getElementById('cartItems');
+
+        // Clear previous items
+        cartItemsContainer.innerHTML = '';
+
+        // Populate modal with cart items
+        items.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'flex items-center justify-between';
+
+            cartItem.innerHTML = `
+        <div class="flex items-center">
+          <img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-md mr-4">
+          <div>
+            <h4 class="text-sm font-medium">${item.title}</h4>
+            <p class="text-xs text-gray-600">Quantity: ${item.quantity}</p>
+          </div>
+        </div>
+        <p class="text-sm font-medium">${formatMoney(item.line_price)}</p>
+      `;
+            cartItemsContainer.appendChild(cartItem);
+        });
+
+        // Show modal
+        cartModal.classList.remove('hidden');
+    }
+
+    // Close Modal
+    document.getElementById('closeModalButton').addEventListener('click', function () {
+        const cartModal = document.getElementById('cartModal');
+        cartModal.classList.add('hidden');
+    });
+</script>
