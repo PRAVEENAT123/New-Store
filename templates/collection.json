@@ -11,7 +11,9 @@
   "sections": {
     "template": {
       "type": "template-collection",
-      "settings": {}
+      "settings": {
+        "number_of_product_show": 15
+      }
     }
   },
   "order": [
