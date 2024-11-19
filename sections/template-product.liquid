@@ -66,6 +66,16 @@
 
 </div>
 <script>
+    // Function to change the main product image
+    function changeImage(src) {
+        const mainImage = document.getElementById('mainImage');
+        if (mainImage) {
+            mainImage.src = src;
+        } else {
+            console.error('Main image element not found');
+        }
+    }
+
     // Add to Cart Functionality
     document.getElementById('addToCartButton').addEventListener('click', function () {
         const variantId = document.getElementById('variant').value;
@@ -114,15 +124,15 @@
             cartItem.className = 'flex items-center justify-between';
 
             cartItem.innerHTML = `
-        <div class="flex items-center">
-          <img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-md mr-4">
-          <div>
-            <h4 class="text-sm font-medium">${item.title}</h4>
-            <p class="text-xs text-gray-600">Quantity: ${item.quantity}</p>
-          </div>
-        </div>
-        <p class="text-sm font-medium">${formatMoney(item.line_price)}</p>
-      `;
+            <div class="flex items-center">
+                <img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-md mr-4">
+                <div>
+                    <h4 class="text-sm font-medium">${item.title}</h4>
+                    <p class="text-xs text-gray-600">Quantity: ${item.quantity}</p>
+                </div>
+            </div>
+            <p class="text-sm font-medium">${formatMoney(item.line_price)}</p>
+            `;
             cartItemsContainer.appendChild(cartItem);
         });
 
