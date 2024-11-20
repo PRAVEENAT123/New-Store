@@ -3,12 +3,14 @@
         <div class="flex flex-wrap -mx-4">
             <!-- Product Images -->
             <div class="w-full md:w-1/2 px-4 mb-8">
-                <img src="{{ product.featured_image | img_url: '500x500' }}" alt="{{ product.title }}"
-                    class="w-full h-auto rounded-lg shadow-md mb-4" id="mainImage">
+                <div class="relative">
+                    <img src="{{ product.featured_image | img_url: '1024x1024' }}" alt="{{ product.title }}"
+                        class="w-full h-96 object-contain rounded-lg shadow-md mb-4" id="mainImage">
+                </div>
                 <div class="flex gap-4 py-4 justify-center overflow-x-auto">
                     {% for image in product.images %}
                     <img src="{{ image | img_url: '200x200' }}" alt="{{ product.title }}"
-                        class="size-16 sm:size-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
+                        class="w-20 h-20 object-cover rounded-md cursor-pointer opacity-60 hover:opacity-100 transition duration-300"
                         onclick="changeImage('{{ image | img_url: '1024x1024' }}')">
                     {% endfor %}
                 </div>
@@ -43,13 +45,23 @@
                     <input type="number" id="quantity" name="quantity" min="1" value="1"
                         class="w-12 text-center rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
-
+                {% if product.available %}
                 <div class="flex space-x-4 mb-6">
                     <button id="addToCartButton"
                         class="bg-indigo-600 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Add to Cart
                     </button>
                 </div>
+                {% else %}
+                <div class="flex space-x-4 mb-6">
+                    <label
+                        class="bg-red-500 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-black-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Sold Out
+                    </label>
+                </div>
+
+                {% endif %}
+
             </div>
         </div>
     </div>
@@ -63,8 +75,8 @@
                 class="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Close</button>
         </div>
     </div>
-
 </div>
+
 <script>
     // Function to change the main product image
     function changeImage(src) {
