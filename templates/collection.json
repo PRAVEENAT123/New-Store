@@ -12,7 +12,7 @@
     "template": {
       "type": "template-collection",
       "settings": {
-        "number_of_product_show": 6
+        "number_of_product_show": 8
       }
     }
   },
