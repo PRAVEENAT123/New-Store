@@ -1,12 +1,21 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    
-    "layout": "theme",
-    "sections": {
-        // template404 is Id of the section 
-        "template404":{
-            // type mean in what are section file name this  case product is section file name 
-            "type": "404"
-        }
-    },
-    "order":["template404"]
+  "layout": "theme",
+  "sections": {
+    "template404": {
+      "type": "404",
+      "settings": {}
+    }
+  },
+  "order": [
+    "template404"
+  ]
 }
