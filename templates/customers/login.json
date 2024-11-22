@@ -11,12 +11,12 @@
 {
   "layout": "theme",
   "sections": {
-    "template404": {
-      "type": "cart-item",
+    "template-customer-login": {
+      "type": "template-customer-login",
       "settings": {}
     }
   },
   "order": [
-    "template404"
+    "template-customer-login"
   ]
 }
