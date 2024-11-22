@@ -27,7 +27,7 @@
                     <tr class="border-b" data-item-key="{{ item.key }}">
                         <td class="py-4 px-4">
                             <img src="{{ item.image | img_url: 'medium' }}" alt="{{ item.product.title }}"
-                                class="w-[120px] h-[120px] object-cover rounded-lg">
+                                class="w-[120px] h-[120px] object-cover rounded-lg" width="100px" height="100px">
                         </td>
                         <td class="py-4 px-4">
                             <h5 class="font-manrope font-bold text-xl text-gray-900">{{ item.product.title }}</h5>
@@ -117,55 +117,55 @@
 {% endschema %}
 <script>
     document.querySelectorAll('.increase-quantity, .decrease-quantity').forEach(button => {
-            button.addEventListener('click', function () {
-                const itemKey = this.getAttribute('data-item-key');
-                const isIncrease = this.classList.contains('increase-quantity');
-                const quantityEl = document.querySelector(`.item-quantity[data-item-key="${itemKey}"]`);
-                const linePriceEl = document.querySelector(`.item-line-price[data-line-price-id="${itemKey}"]`);
+        button.addEventListener('click', function () {
+            const itemKey = this.getAttribute('data-item-key');
+            const isIncrease = this.classList.contains('increase-quantity');
+            const quantityEl = document.querySelector(`.item-quantity[data-item-key="${itemKey}"]`);
+            const linePriceEl = document.querySelector(`.item-line-price[data-line-price-id="${itemKey}"]`);
 
-                let currentQuantity = parseInt(quantityEl.textContent);
-                let newQuantity = isIncrease ? currentQuantity + 1 : Math.max(1, currentQuantity - 1);
+            let currentQuantity = parseInt(quantityEl.textContent);
+            let newQuantity = isIncrease ? currentQuantity + 1 : Math.max(1, currentQuantity - 1);
 
-                if (newQuantity < 1) {
-                    console.error('Invalid quantity:', newQuantity);
-                    return;
-                }
+            if (newQuantity < 1) {
+                console.error('Invalid quantity:', newQuantity);
+                return;
+            }
 
-                fetch('/cart/change.js', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache'
-                    },
-                    body: JSON.stringify({ id: itemKey, quantity: newQuantity })
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            console.error(`Error: ${response.status}`, response.statusText);
-                            return response.json();
-                        }
+            fetch('/cart/change.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache'
+                },
+                body: JSON.stringify({ id: itemKey, quantity: newQuantity })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.error(`Error: ${response.status}`, response.statusText);
                         return response.json();
-                    })
-                    .then(data => {
-                        if (!data || !data.items) {
-                            console.error('Invalid API response:', data);
-                            return;
-                        }
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data || !data.items) {
+                        console.error('Invalid API response:', data);
+                        return;
+                    }
 
-                        quantityEl.textContent = newQuantity;
+                    quantityEl.textContent = newQuantity;
 
-                        const updatedItem = data.items.find(i => i.key === itemKey);
-                        if (updatedItem) {
-                            linePriceEl.textContent = `$${(updatedItem.line_price / 100).toFixed(2)}`;
-                        } else {
-                            console.error(`Item with key ${itemKey} not found.`);
-                        }
+                    const updatedItem = data.items.find(i => i.key === itemKey);
+                    if (updatedItem) {
+                        linePriceEl.textContent = `$${(updatedItem.line_price / 100).toFixed(2)}`;
+                    } else {
+                        console.error(`Item with key ${itemKey} not found.`);
+                    }
 
-                        document.querySelector('.cart-total').textContent = `$${(data.total_price / 100).toFixed(2)}`;
-                    })
-                    .catch(error => console.error('Error updating cart:', error));
-            });
+                    document.querySelector('.cart-total').textContent = `$${(data.total_price / 100).toFixed(2)}`;
+                })
+                .catch(error => console.error('Error updating cart:', error));
         });
+    });
 
 </script>
 
