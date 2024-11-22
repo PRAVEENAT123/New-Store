@@ -11,7 +11,7 @@
   "layout": "theme",
   "sections": {
     "template404": {
-      "type": "404",
+      "type": "cart-item",
       "settings": {}
     }
   },
