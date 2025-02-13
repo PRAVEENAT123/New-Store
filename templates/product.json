@@ -7,15 +7,29 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-
 {
   "sections": {
     "template-product": {
       "type": "template-product",
+      "disabled": true,
+      "settings": {}
+    },
+    "1739430407de462aaf": {
+      "type": "apps",
+      "blocks": {
+        "complete_outfit_star_rating_gi4fEk": {
+          "type": "shopify://apps/complete-outfit/blocks/star_rating/56577393-4226-4565-854b-6dd4929179aa",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "complete_outfit_star_rating_gi4fEk"
+      ],
       "settings": {}
     }
   },
   "order": [
-    "template-product"
+    "template-product",
+    "1739430407de462aaf"
   ]
 }
