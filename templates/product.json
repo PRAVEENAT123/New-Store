@@ -14,22 +14,22 @@
       "disabled": true,
       "settings": {}
     },
-    "1740046112f5ed6147": {
+    "1740129879fa8df2e4": {
       "type": "apps",
       "blocks": {
-        "complete_outfit_testing_QpKXbm": {
+        "complete_outfit_testing_FQwfkb": {
           "type": "shopify://apps/complete-outfit/blocks/testing/56577393-4226-4565-854b-6dd4929179aa",
           "settings": {}
         }
       },
       "block_order": [
-        "complete_outfit_testing_QpKXbm"
+        "complete_outfit_testing_FQwfkb"
       ],
       "settings": {}
     }
   },
   "order": [
     "template-product",
-    "1740046112f5ed6147"
+    "1740129879fa8df2e4"
   ]
 }
